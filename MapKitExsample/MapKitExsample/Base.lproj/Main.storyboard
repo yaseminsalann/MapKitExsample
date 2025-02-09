@@ -18,26 +18,60 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rkT-TG-wip">
-                                <rect key="frame" x="0.0" y="59" width="393" height="759"/>
+                                <rect key="frame" x="0.0" y="225" width="393" height="523"/>
                                 <standardMapConfiguration key="preferredConfiguration"/>
                             </mapView>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="xIQ-sQ-RXZ">
+                                <rect key="frame" x="42" y="77" width="335" height="34"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="comment" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="dn7-do-kQW">
+                                <rect key="frame" x="42" y="133" width="335" height="34"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gsN-3Q-ArP">
+                                <rect key="frame" x="91" y="756" width="200" height="73"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="73" id="zg8-on-UHz"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Save">
+                                    <fontDescription key="titleFontDescription" type="boldSystem" pointSize="26"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="saveClickButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="wIo-k2-26P"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="rkT-TG-wip" secondAttribute="bottom" id="DB5-c1-1oO"/>
-                            <constraint firstItem="rkT-TG-wip" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="T3o-Q4-Vha"/>
-                            <constraint firstItem="rkT-TG-wip" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="Xr6-UO-Rkn"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="rkT-TG-wip" secondAttribute="trailing" id="rPL-mh-vnW"/>
+                            <constraint firstItem="xIQ-sQ-RXZ" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" id="5ou-Qq-MUE"/>
+                            <constraint firstItem="xIQ-sQ-RXZ" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="42" id="AYV-zB-rs4"/>
+                            <constraint firstItem="gsN-3Q-ArP" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="91" id="BhN-JQ-ekc"/>
+                            <constraint firstItem="xIQ-sQ-RXZ" firstAttribute="trailing" secondItem="dn7-do-kQW" secondAttribute="trailing" id="DJB-EL-otc"/>
+                            <constraint firstItem="dn7-do-kQW" firstAttribute="top" secondItem="xIQ-sQ-RXZ" secondAttribute="bottom" constant="22" id="NiA-3d-Qo8"/>
+                            <constraint firstItem="xIQ-sQ-RXZ" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="18" id="OaD-6S-VOI"/>
+                            <constraint firstItem="rkT-TG-wip" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="SbE-Xj-7s5"/>
+                            <constraint firstItem="xIQ-sQ-RXZ" firstAttribute="leading" secondItem="dn7-do-kQW" secondAttribute="leading" id="VaR-45-GA2"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="gsN-3Q-ArP" secondAttribute="trailing" constant="102" id="ZqY-3i-3Ip"/>
+                            <constraint firstItem="gsN-3Q-ArP" firstAttribute="top" secondItem="rkT-TG-wip" secondAttribute="bottom" constant="8" id="aF5-JA-P8r"/>
+                            <constraint firstItem="rkT-TG-wip" firstAttribute="top" secondItem="dn7-do-kQW" secondAttribute="bottom" constant="58" id="c0P-92-LvQ"/>
+                            <constraint firstItem="rkT-TG-wip" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="d1Q-o6-yWQ"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="gsN-3Q-ArP" secondAttribute="bottom" constant="-11" id="tAf-4p-cgq"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="commentTextField" destination="dn7-do-kQW" id="yxv-66-gJH"/>
                         <outlet property="mapView" destination="rkT-TG-wip" id="I0e-8J-WEg"/>
+                        <outlet property="nameTextField" destination="xIQ-sQ-RXZ" id="MdX-Tx-NUs"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="34" y="4"/>
+            <point key="canvasLocation" x="32.824427480916029" y="3.5211267605633805"/>
         </scene>
     </scenes>
     <resources>

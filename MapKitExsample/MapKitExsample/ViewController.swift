@@ -8,14 +8,20 @@
 import UIKit
 import MapKit
 import CoreLocation
+import CoreData
 
 class ViewController: UIViewController, MKMapViewDelegate,CLLocationManagerDelegate {
 
     @IBOutlet weak var mapView: MKMapView!
     
+    @IBOutlet weak var nameTextField: UITextField!
+    
+    @IBOutlet weak var commentTextField: UITextField!
     
     //kullanıcını konumu ile ilgili işlemler yapılırken kullnılır.
    var locationManager =  CLLocationManager()
+    var choosenLatitude = Double()
+    var choosenLongitude = Double()
     
     
     override func viewDidLoad() {
@@ -43,10 +49,12 @@ class ViewController: UIViewController, MKMapViewDelegate,CLLocationManagerDeleg
             //touchPoint değişkeni dokunulan kordinatları tutar
             let touchPoint = gestureRecognizer.location(in: mapView)
             let touchCoordinate = mapView.convert(touchPoint, toCoordinateFrom: self.mapView)
+            choosenLatitude = touchCoordinate.latitude
+            choosenLongitude = touchCoordinate.longitude
             let annotation = MKPointAnnotation()
             annotation.coordinate = touchCoordinate
-            annotation.title = "New Annotation"
-            annotation.subtitle = "Travel Book"
+            annotation.title = nameTextField.text
+            annotation.subtitle = commentTextField.text
             self.mapView.addAnnotation(annotation)
         }
         
@@ -62,6 +70,23 @@ class ViewController: UIViewController, MKMapViewDelegate,CLLocationManagerDeleg
         let region = MKCoordinateRegion(center: location, span: span)
         mapView.setRegion(region, animated: true)
         //yukarıdaki verilen bilgilere göre haritada belirtilen enlem ve boylama zoomlama yaparak konum göstermiş olduk.
+    }
+    
+    @IBAction func saveClickButton(_ sender: Any) {
+        let appdelegate = UIApplication.shared.delegate as! AppDelegate
+        let context = appdelegate.persistentContainer.viewContext
+        let newPlace = NSEntityDescription.insertNewObject(forEntityName: "Places", into: context)
+        newPlace.setValue(nameTextField.text, forKey: "title")
+        newPlace.setValue(commentTextField.text, forKey: "subtitle")
+        newPlace.setValue(choosenLatitude, forKey: "latitude")
+        newPlace.setValue(choosenLongitude, forKey: "longitude")
+        newPlace.setValue(UUID(), forKey: "id")
+        do{
+            try context.save()
+            print("success")
+        }catch{
+            print("error")
+        }
     }
     
 }
