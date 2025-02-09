@@ -117,10 +117,12 @@ class ViewController: UIViewController, MKMapViewDelegate,CLLocationManagerDeleg
         if gestureRecognizer.state == .began {
             //dokunma işlemi algılandıysa bu blok içindeki işlemler yapılır
             //touchPoint değişkeni dokunulan kordinatları tutar
-            let touchPoint = gestureRecognizer.location(in: mapView)
-            let touchCoordinate = mapView.convert(touchPoint, toCoordinateFrom: self.mapView)
+            let touchPoint = gestureRecognizer.location(in: self.mapView)
+            let touchCoordinate = self.mapView.convert(touchPoint, toCoordinateFrom: self.mapView)
+            
             choosenLatitude = touchCoordinate.latitude
             choosenLongitude = touchCoordinate.longitude
+            print("\(choosenLatitude) == \(touchCoordinate.latitude)")
             let annotation = MKPointAnnotation()
             annotation.coordinate = touchCoordinate
             annotation.title = nameTextField.text
@@ -148,6 +150,54 @@ class ViewController: UIViewController, MKMapViewDelegate,CLLocationManagerDeleg
        
     }
     
+    func mapView(_ mapView: MKMapView, viewFor annotation: any MKAnnotation) -> MKAnnotationView? {
+
+        //kullanıcının yerini pin ile göstermek istemediğimiz için kontrol ediyoruz.
+        if annotation is MKUserLocation {
+            return nil
+        }
+        let reuseId = "myAnnotagion"
+        var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MKPinAnnotationView
+        
+        if pinView == nil {
+            pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier:reuseId)
+            //baloncuk ile birlikte extra bilgi gösterilen yer
+            pinView?.canShowCallout = true
+            pinView?.tintColor = UIColor.black
+            
+            
+            let button = UIButton(type: .detailDisclosure)
+            pinView?.rightCalloutAccessoryView = button
+        }else{
+            pinView?.annotation = annotation
+        }
+        return pinView
+    }
+    //navigasyon işlemleri için
+    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+        if selectedTitle != ""{
+            
+            let requestLocation = CLLocation(latitude: annotationLatitude, longitude: annotationLongitude)
+            CLGeocoder().reverseGeocodeLocation(requestLocation) { (placemarks, error) in
+                //closure
+                //bir işlem sonucunda ya bir data verilir yada placemarks objesi bulunan bir dizi döndürür
+                if let placemark = placemarks{
+                    if placemark.count > 0{
+                        let newPlacemark = MKPlacemark(placemark: placemark[0])
+                        //navigasyonu açabilmemiz için MapItem oluşturmamız gerekiyor.
+                        let item = MKMapItem(placemark: newPlacemark)
+                        item.name = self.annotationTitle
+                        //hangi modda açacağımızı belirtiyoruz.bu örnekde araba ile gitme modunda açtık.
+                        let launchOptions = [MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeDriving]
+                        item.openInMaps(launchOptions: launchOptions)
+
+                        
+                    }
+                }
+                
+            }
+        }
+    }
     @IBAction func saveClickButton(_ sender: Any) {
         let appdelegate = UIApplication.shared.delegate as! AppDelegate
         let context = appdelegate.persistentContainer.viewContext
@@ -163,6 +213,9 @@ class ViewController: UIViewController, MKMapViewDelegate,CLLocationManagerDeleg
         }catch{
             print("error")
         }
+        
+        NotificationCenter.default.post(name: NSNotification.Name("newPlace"), object: nil)
+        navigationController?.popViewController(animated: true)
     }
     
 }
