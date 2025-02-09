@@ -28,6 +28,28 @@ class ViewController: UIViewController, MKMapViewDelegate,CLLocationManagerDeleg
         //kullanıcıdan izin istenir.yine duruma göre seçilir her zamanmı yoksa uygulama açıkkenmi vb durumlara göre seçilmeli.aşağıda uygulama çık olduğunda konum bilgisini kullanılması seçilmişdir.
         locationManager.requestWhenInUseAuthorization()
         locationManager.startUpdatingLocation()
+        
+        //
+        let gestureRecognizer = UILongPressGestureRecognizer(target:self, action: #selector(chooseLocation(gestureRecognizer: )))
+        //kaç saniye basıldığı bilgisi verilir.
+        gestureRecognizer.minimumPressDuration = 3
+        mapView.addGestureRecognizer(gestureRecognizer)
+    }
+    @objc func chooseLocation(gestureRecognizer: UILongPressGestureRecognizer) {
+        //gestureRecognizer fonskiyonlarını kullanabilmek için fonksiyon içine input olarak alıyoruz.
+        //
+        if gestureRecognizer.state == .began {
+            //dokunma işlemi algılandıysa bu blok içindeki işlemler yapılır
+            //touchPoint değişkeni dokunulan kordinatları tutar
+            let touchPoint = gestureRecognizer.location(in: mapView)
+            let touchCoordinate = mapView.convert(touchPoint, toCoordinateFrom: self.mapView)
+            let annotation = MKPointAnnotation()
+            annotation.coordinate = touchCoordinate
+            annotation.title = "New Annotation"
+            annotation.subtitle = "Travel Book"
+            self.mapView.addAnnotation(annotation)
+        }
+        
     }
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -41,5 +63,6 @@ class ViewController: UIViewController, MKMapViewDelegate,CLLocationManagerDeleg
         mapView.setRegion(region, animated: true)
         //yukarıdaki verilen bilgilere göre haritada belirtilen enlem ve boylama zoomlama yaparak konum göstermiş olduk.
     }
+    
 }
 
